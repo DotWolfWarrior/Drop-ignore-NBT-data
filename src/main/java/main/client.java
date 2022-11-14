@@ -42,8 +42,8 @@ public class client implements ClientModInitializer{
                 var t = "";
                 PlayerInventory inv = client.player.getInventory();
                 var syncId = mc.player.playerScreenHandler.syncId;
-                // List<ItemStack> l = new ArrayList<>();
-                List<Integer> l = new ArrayList<>();
+                List<ItemStack> l = new ArrayList<>();
+                // List<Integer> l = new ArrayList<>();
 
                 
                 ItemStack item = mc.player.getStackInHand(client.player.getActiveHand());
@@ -52,12 +52,14 @@ public class client implements ClientModInitializer{
                 // }
 
                 for (int i = 0; i < inv.size(); i++){
+                    l.add(inv.getStack(i));
+                    t += i+":"+inv.getStack(i).toString()+", ";
                     if (item.getItem() == inv.getStack(i).getItem()){
-                        l.add(i);
-                        mc.interactionManager.clickSlot(syncId, i, 1, SlotActionType.THROW, mc.player);
+                        if (i >= 9){
+                            mc.interactionManager.clickSlot(syncId, i, 1, SlotActionType.THROW, mc.player);
+                        }
                         // client.player.dropStack(inv.getStack(i));
 
-                        // t += inv.getStack(i).getItem()+", ";
                     }
                     
                 }
@@ -65,7 +67,8 @@ public class client implements ClientModInitializer{
                 //     mc.interactionManager.clickSlot(syncId, inv.getSlotWithStack(it), 1, SlotActionType.THROW, mc.player);
                 //     // client.interactionManager.clickSlot(0, 0, 0, null, null);
                 // });
-                client.player.sendMessage(Text.literal(l.toString()), false);
+                // client.player.sendMessage(Text.literal(l.toString()), false);
+                client.player.sendMessage(Text.literal(t), false);
 
             }
         });
