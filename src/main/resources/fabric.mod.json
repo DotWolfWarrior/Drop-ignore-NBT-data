@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "dinbtd",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Drop Ingoring NBT Data",
+  "description": "This mod allows you to drop all items ingoring NBT data",
   "authors": [
-    "Me!"
+    "DotWolfWarrior"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -19,16 +19,19 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "main.main"
+    ],
+    "client": [
+      "main.client"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric-api": "*",
+    "fabric-key-binding-api-v1": "*",
     "minecraft": "~1.19",
     "java": ">=17"
   },
