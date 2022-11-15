@@ -1,26 +1,22 @@
 package main;
 
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.client.option.KeyBinding;
+// import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
-import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 
 
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+// import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 
-import java.util.ArrayList;
-import java.util.List;
+// import java.util.ArrayList;
+// import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -31,46 +27,49 @@ public class client implements ClientModInitializer{
     }
     public static final String KeyCategory = "DINBT";
 
-    private static KeyBinding kb = KeyBindingHelper.registerKeyBinding(new KeyBinding("Drop",InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_K,KeyCategory));
+    // private static KeyBinding kb = KeyBindingHelper.registerKeyBinding(new KeyBinding("Drop",InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_K,KeyCategory));
     private static MinecraftClient mc;
 
     
     public static void registerKeyInputs(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            mc = client.getInstance();
-            if (kb.wasPressed()) {
+            mc = MinecraftClient.getInstance();
+            if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_K)) {
+            // if (kb.wasPressed()) {
                 var t = "";
                 PlayerInventory inv = client.player.getInventory();
                 var syncId = mc.player.playerScreenHandler.syncId;
-                List<ItemStack> l = new ArrayList<>();
+                var slots = mc.player.playerScreenHandler.getStacks();
+                // List<ItemStack> l = new ArrayList<>();
                 // List<Integer> l = new ArrayList<>();
 
                 
-                ItemStack item = mc.player.getStackInHand(client.player.getActiveHand());
-                // if (item.getItem() != "air"){
+                // ItemStack item = mc.player.getStackInHand(client.player.getActiveHand());
+                // ItemStack item = mc.player.playerScreenHandler.getCursorStack();
+                // ItemStack item = inv.getStack(inv.selectedSlot);
+                ItemStack item = mc.player.playerScreenHandler.
 
-                // }
-
-                for (int i = 0; i < inv.size(); i++){
-                    l.add(inv.getStack(i));
-                    t += i+":"+inv.getStack(i).toString()+", ";
-                    if (item.getItem() == inv.getStack(i).getItem()){
-                        if (i >= 9){
+                // mc.player.getInventory().selectedSlot;
+                if (item.getItem().toString() != "air"){
+                    for (int i = 0; i < inv.size(); i++) {
+                        var slotId = inv.getStack(i);
+                        if (item.getItem() == slotId.getItem()){
+                            t += slotId+":"+inv.getStack(i).toString()+", \n";
                             mc.interactionManager.clickSlot(syncId, i, 1, SlotActionType.THROW, mc.player);
                         }
-                        // client.player.dropStack(inv.getStack(i));
 
                     }
-                    
+                    // client.player.sendMessage(Text.literal(l.toString()), false);
+
                 }
-                // l.forEach(it -> {
-                //     mc.interactionManager.clickSlot(syncId, inv.getSlotWithStack(it), 1, SlotActionType.THROW, mc.player);
-                //     // client.interactionManager.clickSlot(0, 0, 0, null, null);
-                // });
-                // client.player.sendMessage(Text.literal(l.toString()), false);
                 client.player.sendMessage(Text.literal(t), false);
 
-            }
+                client.player.sendMessage(Text.literal("Key was pressed"), false);
+
+
+                
+
+            };
         });
     }
 }
