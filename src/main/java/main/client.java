@@ -1,8 +1,10 @@
 package main;
 
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.InventoryOwner;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 // import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
@@ -13,7 +15,8 @@ import net.minecraft.client.MinecraftClient;
 import net.fabricmc.api.ClientModInitializer;
 // import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 
 // import java.util.ArrayList;
 // import java.util.List;
@@ -40,21 +43,20 @@ public class client implements ClientModInitializer{
                 PlayerInventory inv = client.player.getInventory();
                 var syncId = mc.player.playerScreenHandler.syncId;
                 var slots = mc.player.playerScreenHandler.getStacks();
-                // List<ItemStack> l = new ArrayList<>();
-                // List<Integer> l = new ArrayList<>();
+                // var a = mc.player.playerScreenHandler.
+                // var cursor = mc.targetedEntity.
 
                 
                 // ItemStack item = mc.player.getStackInHand(client.player.getActiveHand());
                 // ItemStack item = mc.player.playerScreenHandler.getCursorStack();
-                // ItemStack item = inv.getStack(inv.selectedSlot);
-                ItemStack item = mc.player.playerScreenHandler.
+                ItemStack item = inv.getStack(inv.selectedSlot);
 
                 // mc.player.getInventory().selectedSlot;
                 if (item.getItem().toString() != "air"){
-                    for (int i = 0; i < inv.size(); i++) {
-                        var slotId = inv.getStack(i);
+                    for (int i = 0; i < slots.size(); i++) {
+                        var slotId = slots.get(i);
                         if (item.getItem() == slotId.getItem()){
-                            t += slotId+":"+inv.getStack(i).toString()+", \n";
+                            t += slotId+":"+slots.get(i).toString()+", \n";
                             mc.interactionManager.clickSlot(syncId, i, 1, SlotActionType.THROW, mc.player);
                         }
 
@@ -64,7 +66,7 @@ public class client implements ClientModInitializer{
                 }
                 client.player.sendMessage(Text.literal(t), false);
 
-                client.player.sendMessage(Text.literal("Key was pressed"), false);
+                client.player.sendMessage(Text.literal(slots.size()+""), false);
 
 
                 
